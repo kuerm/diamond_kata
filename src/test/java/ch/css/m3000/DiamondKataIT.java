@@ -122,18 +122,9 @@ class DiamondKataIT {
 
     class DiamondKata {
 
-        private static String getLowerPartString(IndentationChar[] indentationChars, int maxIndentation) {
-            StringBuilder result = new StringBuilder();
-            for (int i = indentationChars.length - 2; i >= 0; i--) {
-                IndentationChar indentationChar = indentationChars[i];
-                appendFirstPart(result, indentationChar);
-                if (isNotFirstNorLastLine(maxIndentation, indentationChar)) {
-                    result.append(" ".repeat(2 * maxIndentation - 2 * indentationChar.indentation - 1))
-                            .append(indentationChar.character);
-                }
-                result.append("\n");
-            }
-            return result.toString();
+        private static void appendSecondPart(int maxIndentation, StringBuilder result, IndentationChar indentationChar) {
+            result.append(" ".repeat(2 * maxIndentation - 2 * indentationChar.indentation - 1))
+                    .append(indentationChar.character);
         }
 
         private static void appendFirstPart(StringBuilder result, IndentationChar indentationChar) {
@@ -141,19 +132,35 @@ class DiamondKataIT {
                     .append(indentationChar.character);
         }
 
+        private static void appendNewLine(StringBuilder result) {
+            result.append("\n");
+        }
+
         private static boolean isNotFirstNorLastLine(int maxIndentation, IndentationChar indentationChar) {
             return indentationChar.indentation != maxIndentation;
         }
 
-        private static String getUpperPartString(IndentationChar[] indentationChars, int maxIndentation) {
+        private static void concatLine(int maxIndentation, StringBuilder result, IndentationChar indentationChar) {
+            appendFirstPart(result, indentationChar);
+            if (isNotFirstNorLastLine(maxIndentation, indentationChar)) {
+                appendSecondPart(maxIndentation, result, indentationChar);
+            }
+            appendNewLine(result);
+        }
+
+        private static String getLowerDiamondPart(IndentationChar[] indentationChars, int maxIndentation) {
+            StringBuilder result = new StringBuilder();
+            for (int i = indentationChars.length - 2; i >= 0; i--) {
+                IndentationChar indentationChar = indentationChars[i];
+                concatLine(maxIndentation, result, indentationChar);
+            }
+            return result.toString();
+        }
+
+        private static String getUpperDiamondPart(IndentationChar[] indentationChars, int maxIndentation) {
             StringBuilder result = new StringBuilder();
             for (IndentationChar indentationChar : indentationChars) {
-                appendFirstPart(result, indentationChar);
-                if (isNotFirstNorLastLine(maxIndentation, indentationChar)) {
-                    result.append(" ".repeat(2 * maxIndentation - 2 * indentationChar.indentation - 1))
-                            .append(indentationChar.character);
-                }
-                result.append("\n");
+                concatLine(maxIndentation, result, indentationChar);
             }
             return result.toString();
         }
@@ -170,9 +177,12 @@ class DiamondKataIT {
             return fullDiamond.substring(0, fullDiamond.length() - 1);
         }
 
+        private static boolean isNotALetter(char seed) {
+            return !Character.isLetter(seed);
+        }
+
         private char validate(char seed) {
-            // if seed is not a letter
-            if (!Character.isLetter(seed)) {
+            if (isNotALetter(seed)) {
                 throw new IllegalArgumentException("Invalid Input");
             }
             return Character.toUpperCase(seed);
@@ -187,8 +197,8 @@ class DiamondKataIT {
         }
 
         String getString(IndentationChar[] indentationChars, int maxIndentation) {
-            String firstPart = getUpperPartString(indentationChars, maxIndentation);
-            String secondPart = getLowerPartString(indentationChars, maxIndentation);
+            String firstPart = getUpperDiamondPart(indentationChars, maxIndentation);
+            String secondPart = getLowerDiamondPart(indentationChars, maxIndentation);
             String fullDiamond = concat(firstPart, secondPart);
             return removeLastNewLine(fullDiamond);
         }
