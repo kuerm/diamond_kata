@@ -53,17 +53,15 @@ class DiamondKataIT {
                 .isEqualTo(actual);
     }
 
-    private char validate(char seed) {
-        return Character.toUpperCase(seed);
-    }
-
     record IndentationChar(char character,
                            int indentation) {
-
-
     }
 
     class DiamondKata {
+
+        private char validate(char seed) {
+            return Character.toUpperCase(seed);
+        }
 
         private char[] detectCharacters(char seed) {
             char[] characters = new char[seed - 'A' + 1];
@@ -81,7 +79,7 @@ class DiamondKataIT {
             return returnvalue.toString();
         }
 
-        private IndentationChar[] getIndentation(char[] characters) {
+        IndentationChar[] getIndentation(char[] characters) {
             int totalCharacters = characters.length;
             IndentationChar[] indentationChars = new IndentationChar[totalCharacters];
 
