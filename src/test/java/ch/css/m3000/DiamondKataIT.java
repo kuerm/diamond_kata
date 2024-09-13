@@ -5,29 +5,26 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class DiamondKataIT {
+    DiamondKata sut = new DiamondKata();
+
     @Test
     void diamondWhenWrongInputSeedThenReturnInvalidInputAsString() {
-        DiamondKata diamondKata = new DiamondKata();
-
-        String actual = diamondKata.diamond('0');
+        String actual = sut.diamond('0');
 
         assertThat("Invalid Input").isEqualTo(actual);
     }
 
     @Test
     void diamondWhenInputSeedIsAThenReturnA() {
-        DiamondKata diamondKata = new DiamondKata();
-
-        String actual = diamondKata.diamond('A');
+        String actual = sut.diamond('A');
 
         assertThat("A").isEqualTo(actual);
     }
 
     @Test
     void diamondWhenInputSeedIsLowerCaseBThenReturnABBA() {
-        DiamondKata diamondKata = new DiamondKata();
 
-        String actual = diamondKata.diamond('b');
+        String actual = sut.diamond('b');
 
         assertThat("""
                  A
@@ -38,9 +35,9 @@ class DiamondKataIT {
 
     @Test
     void diamondWhenInputSeedIsDThenReturnDiamond() {
-        DiamondKata diamondKata = new DiamondKata();
 
-        String actual = diamondKata.diamond('D');
+
+        String actual = sut.diamond('D');
 
         assertThat("""
                    A
@@ -51,6 +48,11 @@ class DiamondKataIT {
                   B B
                    A""")
                 .isEqualTo(actual);
+    }
+
+    @Test
+    void getIndentationWhenTwoCharactersThenReturnFirstCharacterWith0AndSecondWith1() {
+
     }
 
     record IndentationChar(char character,
