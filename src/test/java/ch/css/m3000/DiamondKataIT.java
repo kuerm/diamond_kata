@@ -65,8 +65,28 @@ class DiamondKataIT {
         return Character.toUpperCase(seed);
     }
 
-    private String getString(char[] characters) {
-        return "" + characters[0];
+    private String getString(IndentationChar[] indentationChars) {
+        String returnvalue = "";
+        for (int i = 0; i < indentationChars.length; i++) {
+            returnvalue += indentationChars[i].character;
+        }
+        return returnvalue;
+    }
+
+    private IndentationChar[] getIndentation(char[] characters) {
+        int totalCharacters = characters.length;
+        IndentationChar[] indentationChars = new IndentationChar[totalCharacters];
+
+        int j = 0;
+        for (int i = totalCharacters - 1; i >= 0; i--) {
+            indentationChars[j++] = new IndentationChar(characters[i], i);
+        }
+        return indentationChars;
+    }
+
+    private record IndentationChar(char character,
+                                   int indentation) {
+
     }
 
     class DiamondKata {
@@ -74,8 +94,9 @@ class DiamondKataIT {
             char validatedSeed = validate(seed);
             char[] characters = detectCharacters(validatedSeed);
             // detect on how many characters has to be displayed how much indentation every one has
+            IndentationChar[] indentationChars = getIndentation(characters);
             // display
-            String diamond = getString(characters);
+            String diamond = getString(indentationChars);
             return diamond;
         }
     }
