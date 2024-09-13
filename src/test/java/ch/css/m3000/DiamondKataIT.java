@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class DiamondKataIT {
-    DiamondKata sut = new DiamondKata();
+    private final DiamondKata sut = new DiamondKata();
 
     @Test
     void diamondWhenWrongInputSeedThenReturnInvalidInputAsString() {
@@ -21,7 +21,7 @@ class DiamondKataIT {
     void diamondWhenInputSeedIsAThenReturnA() {
         String actual = sut.diamond('A');
 
-        assertThat("A").isEqualTo(actual);
+        assertThat(actual).isEqualTo("A");
     }
 
     @Test
@@ -126,10 +126,8 @@ class DiamondKataIT {
             StringBuilder result = new StringBuilder();
             for (int i = indentationChars.length - 2; i >= 0; i--) {
                 IndentationChar indentationChar = indentationChars[i];
-                result.append(" ".repeat(indentationChar.indentation))
-                        .append(indentationChar.character)
-                ;
-                if (indentationChar.indentation != maxIndentation) {
+                appendFirstPart(result, indentationChar);
+                if (isNotFirstNorLastLine(maxIndentation, indentationChar)) {
                     result.append(" ".repeat(2 * maxIndentation - 2 * indentationChar.indentation - 1))
                             .append(indentationChar.character);
                 }
@@ -138,12 +136,20 @@ class DiamondKataIT {
             return result.toString();
         }
 
+        private static void appendFirstPart(StringBuilder result, IndentationChar indentationChar) {
+            result.append(" ".repeat(indentationChar.indentation))
+                    .append(indentationChar.character);
+        }
+
+        private static boolean isNotFirstNorLastLine(int maxIndentation, IndentationChar indentationChar) {
+            return indentationChar.indentation != maxIndentation;
+        }
+
         private static String getUpperPartString(IndentationChar[] indentationChars, int maxIndentation) {
             StringBuilder result = new StringBuilder();
             for (IndentationChar indentationChar : indentationChars) {
-                result.append(" ".repeat(indentationChar.indentation))
-                        .append(indentationChar.character);
-                if (indentationChar.indentation != maxIndentation) {
+                appendFirstPart(result, indentationChar);
+                if (isNotFirstNorLastLine(maxIndentation, indentationChar)) {
                     result.append(" ".repeat(2 * maxIndentation - 2 * indentationChar.indentation - 1))
                             .append(indentationChar.character);
                 }
