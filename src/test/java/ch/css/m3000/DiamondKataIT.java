@@ -9,7 +9,7 @@ class DiamondKataIT {
     void diamondWhenWrongInputSeedThenReturnInvalidInputAsString() {
         DiamondKata diamondKata = new DiamondKata();
 
-        String actual = diamondKata.diamond(0);
+        String actual = diamondKata.diamond('0');
 
         assertThat("Invalid Input").isEqualTo(actual);
     }
@@ -51,5 +51,32 @@ class DiamondKataIT {
                   B B
                    A""")
                 .isEqualTo(actual);
+    }
+
+    private char[] detectCharacters(char seed) {
+        char[] characters = new char[seed - 'A' + 1];
+        for (int i = 0; i < characters.length; i++) {
+            characters[i] = (char) ('A' + i);
+        }
+        return characters;
+    }
+
+    private char validate(char seed) {
+        return Character.toUpperCase(seed);
+    }
+
+    private String getString(char[] characters) {
+        return "" + characters[0];
+    }
+
+    class DiamondKata {
+        public String diamond(char seed) {
+            char validatedSeed = validate(seed);
+            char[] characters = detectCharacters(validatedSeed);
+            // detect on how many characters has to be displayed how much indentation every one has
+            // display
+            String diamond = getString(characters);
+            return diamond;
+        }
     }
 }
