@@ -2,6 +2,8 @@ package ch.css.m3000;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Objects;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class DiamondKataIT {
@@ -52,11 +54,26 @@ class DiamondKataIT {
 
     @Test
     void getIndentationWhenTwoCharactersThenReturnFirstCharacterWith0AndSecondWith1() {
+        IndentationChar[] actual = sut.getIndentation(new char[]{'*', 's'});
 
+        assertThat(actual)
+                .containsExactly(new IndentationChar('*', 1), new IndentationChar('s', 0));
     }
 
     record IndentationChar(char character,
                            int indentation) {
+        @Override
+        public boolean equals(Object object) {
+            if (this == object) return true;
+            if (object == null || getClass() != object.getClass()) return false;
+            IndentationChar that = (IndentationChar) object;
+            return character == that.character && indentation == that.indentation;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(character, indentation);
+        }
     }
 
     class DiamondKata {
@@ -85,9 +102,9 @@ class DiamondKataIT {
             int totalCharacters = characters.length;
             IndentationChar[] indentationChars = new IndentationChar[totalCharacters];
 
-            int j = 0;
-            for (int i = totalCharacters - 1; i >= 0; i--) {
-                indentationChars[j++] = new IndentationChar(characters[i], i);
+            int index = 0;
+            for (int i = 0; i < totalCharacters; i++) {
+                indentationChars[index++] = new IndentationChar(characters[i], totalCharacters - i - 1);
             }
             return indentationChars;
         }
