@@ -60,6 +60,22 @@ class DiamondKataIT {
                 .containsExactly(new IndentationChar('*', 1), new IndentationChar('s', 0));
     }
 
+    @Test
+    void getIndentationWhenOnlyOneCharacter() {
+        IndentationChar[] actual = sut.getIndentation(new char[]{'*'});
+
+        assertThat(actual)
+                .containsExactly(new IndentationChar('*', 0));
+    }
+
+    @Test
+    void getIndentationWhenThreeCharacters() {
+        IndentationChar[] actual = sut.getIndentation(new char[]{'*', 's', 'd'});
+
+        assertThat(actual)
+                .containsExactly(new IndentationChar('*', 2), new IndentationChar('s', 1), new IndentationChar('d', 0));
+    }
+
     record IndentationChar(char character,
                            int indentation) {
         @Override
